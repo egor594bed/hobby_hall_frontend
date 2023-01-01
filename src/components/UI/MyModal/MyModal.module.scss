@@ -1,0 +1,39 @@
+.MyModal {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    opacity: 0;
+
+    transition: opacity .3s;
+}
+
+.MyModalWindow {
+    width: 350px;
+    height: auto;
+    padding: 30px;
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+    position: relative;
+    top: 100%;
+    left: 0;
+    z-index: 9;
+
+    transition: top .3s;
+}
+
+.active {
+    opacity: 1;
+    top: 0;
+
+    & .MyModalWindow {
+        top: 0;
+    }
+}
