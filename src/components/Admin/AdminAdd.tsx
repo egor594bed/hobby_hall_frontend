@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react'
 import { useHttp } from '../../hooks/http.hook';
 import MyButton from '../UI/MyButton/MyButton';
 import MyInput from '../UI/MyInput/MyInput';
+import {ICategory, ISubCategory} from '../../types/ICatalog';
 
 const AdminAdd = () => {
     const {request} = useHttp()
-    const [catalogList, setCatalogList] = useState([])
-    const [activeCategory, setActiveCategory] = useState('')
-    const [activeSubCategory, setSubActiveCategory] = useState('')
+    const [catalogList, setCatalogList] = useState<ICategory[]>([])
+    const [activeCategory, setActiveCategory] = useState<string>('')
+    const [activeSubCategory, setSubActiveCategory] = useState<string>('')
 
     useEffect(() => {
         async function getCatalog() {
@@ -17,21 +18,30 @@ const AdminAdd = () => {
         }
         getCatalog()
     }, [])
-
-    function setNewStates(id) {
+    
+    function setNewStates(id: string) {
         setSubActiveCategory('')
         setActiveCategory(id)
     }
     
-    function addNewProduct(e) {
+    function addNewProduct(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault()
+        let fileElem = document.getElementById('img') as HTMLInputElement
+        if(!fileElem || !fileElem.files || !fileElem.files[0]) {
+            return
+        }
+        let productName = document.getElementById('name') as HTMLInputElement
+        let productDescription = document.getElementById('description') as HTMLInputElement
+        let productPrice = document.getElementById('price') as HTMLInputElement
+        let productArticle = document.getElementById('article') as HTMLInputElement
+        let productQuantity = document.getElementById('quantity') as HTMLInputElement
         let formData = new FormData()
-        formData.append('name', document.getElementById('name').value)
-        formData.append('description', document.getElementById('description').value)
-        formData.append('price', document.getElementById('price').value)
-        formData.append('article', document.getElementById('article').value)
-        formData.append('img', document.getElementById('img').files[0])
-        formData.append('quantity', document.getElementById('quantity').value)
+        formData.append('name', productName.value)
+        formData.append('description', productDescription.value)
+        formData.append('price', productPrice.value)
+        formData.append('article', productArticle.value)
+        formData.append('img', fileElem.files[0])
+        formData.append('quantity', productQuantity.value)
         formData.append('subCategory', activeSubCategory)
 
         try {
@@ -46,8 +56,7 @@ const AdminAdd = () => {
         }
 
     }
-    
-    // console.log(document.getElementById('imgSrc').files[0])
+
     return (
         <div className='admin__display'>
             <p>Категория</p>
@@ -64,7 +73,7 @@ const AdminAdd = () => {
                 ?
                 catalogList.map ((elem) => {
                     if(elem._id == activeCategory) {
-                        return elem.subCategories.map((elem) => {
+                        return elem.subCategories.map((elem: ISubCategory) => {
                             return <option key={elem._id} value={elem._id}>{elem.name}</option>
                         })
                     }
@@ -81,7 +90,7 @@ const AdminAdd = () => {
                 <MyInput placeholder="Артикул" id="article" type="text"></MyInput>
                 <MyInput id="img" type="file" accept="image/png, image/jpeg"></MyInput>
                 <MyInput placeholder="Количество товара" id="quantity" type="text"></MyInput>
-                <MyButton style={{marginTop:"10px"}} onClick={addNewProduct} disabled={!activeSubCategory}>Добавить</MyButton>
+                <MyButton onClick={addNewProduct} disabled={!activeSubCategory}>Добавить</MyButton>
             </form>
 
         </div>

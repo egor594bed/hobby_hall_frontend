@@ -1,15 +1,21 @@
-import React, { memo } from 'react'
-import Loader from '../../Loader/Loader'
+import React, { FC, memo } from 'react'
 import cl from './MySelect.module.scss'
 
-const MySelect = memo((props) => {
+interface IMySelect {
+    onChange(e: number | string): void
+    data: IMySelectItem[]
+}
 
-    // if(typeof(props.data) !== 'Array') return <Loader></Loader>
+interface IMySelectItem {
+    id: string | number
+    name: string
+}
 
+const MySelect: FC<IMySelect> = memo(({onChange, ...props}) => {
 
     return (
-        <select className={cl.MySelect} onChange={e => props.onChange(e.target.value)}>
-            <option value='none' defaultValue>--Выберите способ--</option>
+        <select className={cl.MySelect} onChange={e => onChange(e.target.value)}>
+            <option value='none'>--Выберите способ--</option>
             {
                 props.data.map((elem) => {
                     return <option value={elem.id} key={elem.id}>{elem.name}</option>

@@ -1,12 +1,21 @@
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import MyCounter from '../UI/MyCounter/MyCounter'
+import { IProduct } from '../../types/ICatalog'
 
-const BasketItem = memo(({data, deleteProduct, changeTotal}) => {
+interface IBasketItem {
+    data: IProduct
+    deleteProduct: (id: string) => void
+    changeTotal(id: string, counter: number): void
+}
+
+
+
+const BasketItem: FC<IBasketItem> = memo(({data, deleteProduct, changeTotal}) => {
     const [counter, setCounter] = useState(data.total || 1)
 
-    function checkCounter(value) {
+    function checkCounter(value: number | string) {
         if(value === "") {
             setCounter(1)
         }
@@ -17,8 +26,17 @@ const BasketItem = memo(({data, deleteProduct, changeTotal}) => {
         }
     }
 
+    const linkProvider = (e: React.SyntheticEvent<EventTarget>) => {
+        if (!(e.target instanceof HTMLButtonElement)) {
+            return;
+        }
+        if (e.target.dataset.id) {
+            deleteProduct(e.target.dataset.id)
+        }
+    }
+
     useEffect(() => {
-        let basketStr = localStorage.getItem('basket')
+        let basketStr = localStorage.getItem('basket') as string
         let basketArr = JSON.parse(basketStr)
 
         for (let i = 0; i < basketArr.length; i++) {
@@ -38,7 +56,7 @@ const BasketItem = memo(({data, deleteProduct, changeTotal}) => {
 
     return (
         <div className='basket__item'>
-            <button data-id={data._id} onClick={e => deleteProduct(e.target.dataset.id)} className='basket__item-delete'>X</button>
+            <button data-id={data._id} onClick={e => linkProvider(e)} className='basket__item-delete'>X</button>
             <img className='basket__item-img' src={require(`../../img/${(data.imgName) ? data.imgName : 'nophoto.jpeg'}`)}></img>
             <p className='basket__item-name'>{data.name}</p>
             <div className='basket__item-price-wrapper'>

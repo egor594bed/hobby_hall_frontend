@@ -1,15 +1,15 @@
-export function toBasket(id) {
+export function toBasket(id: string) {
     const newProduct = [id, 1]
 
     if (localStorage.getItem('basket')) {
-        let basketStr = localStorage.getItem('basket')
+        let basketStr = localStorage.getItem('basket') as string
         let basketArr = JSON.parse(basketStr)
 
         let basketMap = new Map(basketArr)
 
         if (basketMap.has(id)) {
             basketMap.delete(id)
-            let newBasketArr = []
+            let newBasketArr
             basketMap.forEach((value, key) => {
                 newBasketArr.push([key, value])
             })

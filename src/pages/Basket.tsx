@@ -10,16 +10,24 @@ import { useRef } from 'react'
 import BasketDelivery from '../components/Basket/BasketDelivery'
 import BasketPayment from '../components/Basket/BasketPayment'
 import MyButton from '../components/UI/MyButton/MyButton'
+import { IProduct } from '../types/ICatalog'
+
+interface IOrderProperty {
+    current?: {
+        delivery: string
+        payment: string
+    }
+}
 
 const Basket = () => {
     const {request, loading, error} = useHttp()
-    const [basketArr, setBasketArr] = useState([])
+    const [basketArr, setBasketArr] = useState<IProduct[]>([])
     const [total, setTotal] = useState(0)
     const [updateTotal, setUpdateTotal] = useState(false)
-    const orderProperty = useRef()
+    const orderProperty: IOrderProperty = useRef()
 
     useEffect(() => {
-        const basketStr = localStorage.getItem('basket')
+        const basketStr = localStorage.getItem('basket') as string
         const basketArr = JSON.parse(basketStr)
 
         request('api/catalog/getBasketGoods', 'POST', basketArr)
@@ -46,13 +54,13 @@ const Basket = () => {
     useEffect(() => {
         setTotal(0)
         for (let i = 0; i < basketArr.length; i++) {
-            setTotal(prev => prev + (basketArr[i].total * basketArr[i].price))
+            setTotal(prev => prev + (basketArr[i].total! * basketArr[i].price))
         }
         setUpdateTotal(false)
     }, [updateTotal, basketArr])
 
-    const changeTotal = useCallback((id, counter) => {
-        const storageBasketStr = localStorage.getItem('basket')
+    const changeTotal = useCallback((id: string, counter: number) => {
+        const storageBasketStr = localStorage.getItem('basket') as string
         const storageBasketArr = JSON.parse(storageBasketStr)
 
         for (let i = 0; i < storageBasketArr.length; i++) {
@@ -75,7 +83,7 @@ const Basket = () => {
 
     }, [basketArr])
 
-    const deleteProductFromBasket = useCallback((id) => {
+    const deleteProductFromBasket = useCallback((id: string) => {
         toBasket(id)
         const newBasket = basketArr.filter((elem) => {
             if(elem._id !== id) return true

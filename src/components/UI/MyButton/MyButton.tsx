@@ -1,7 +1,14 @@
-import React, { memo } from 'react'
+import React, { FC, memo, ReactNode } from 'react'
 import classes from './MyButton.module.scss'
 
-const MyButton = memo(({onClick, ...props}) => {
+interface IMyButton {
+    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+    children?: ReactNode
+    disabled?: boolean
+    style?: Object
+}
+
+const MyButton: FC<IMyButton> = memo(({onClick, ...props}) => {
     return (
         <button className={classes.MyButton} onClick={e => onClick(e)} {...props}>
             {props.children}

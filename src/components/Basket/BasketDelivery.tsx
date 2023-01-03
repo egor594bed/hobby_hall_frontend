@@ -1,7 +1,8 @@
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import { useCallback } from 'react'
 import { useState } from 'react'
 import MySelect from '../UI/MySelect/MySelect'
+import { IDelivery } from '../../types/IBaslet'
 const deliveryArr = [
     {
         name: 'Самовывоз из магазина',
@@ -52,16 +53,16 @@ const deliveryArr = [
 
 const BasketDelivery = memo(() => {
     // const [deliveryArr, setDeliveryArr] = useState([])
-    const [activeDelivery, setActiveDelivery] = useState(undefined)
+    const [activeDelivery, setActiveDelivery] = useState<IDelivery | null>(null)
 
-    const changeActiveDelivery = useCallback((id) => {
-        if(id === 'none') setActiveDelivery(undefined)
+    const changeActiveDelivery = useCallback((id: number | 'none') => {
+        if(id === 'none') setActiveDelivery(null)
         let newDelivery = deliveryArr.find((elem) => {
             if(elem.id == id) return true
         })
-        setActiveDelivery(newDelivery)
+        setActiveDelivery(newDelivery!)
     }, [])
-    console.log(activeDelivery)
+
     return (
         <div className='basket__delivery'>
             <h2 className='basket__delivery-title'>Доставка</h2>

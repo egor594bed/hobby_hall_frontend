@@ -6,10 +6,12 @@ import { useHttp } from '../../hooks/http.hook'
 import { toBasket } from '../../utils/toBasket'
 import Loader from '../Loader/Loader'
 import MyButton from '../UI/MyButton/MyButton'
+import { IProduct } from '../../types/ICatalog'
+
 
 const CatalogDetailingItem = () => {
     const params = useParams()
-    const [product, setProduct] = useState({})
+    const [product, setProduct] = useState<IProduct | null>(null)
     const [onBasket, setOnBasket] = useState(false)
     const {request, loading} = useHttp()
     function noop() {}
@@ -22,15 +24,18 @@ const CatalogDetailingItem = () => {
         getProduct()
     }, [])
 
-    function addToBasket(e) {
-        toBasket(e.target.dataset.id)
-        setOnBasket(!onBasket)
+    function addToBasket(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        let target = e.target as HTMLDataElement
+        if (typeof(target.dataset.id) === 'string') {
+            toBasket(target.dataset.id)
+            setOnBasket(!onBasket)
+        }
     }
 
     useEffect(() => {
         
-        if(localStorage.getItem('basket')) {
-            let basketStr = localStorage.getItem('basket')
+        if(localStorage.getItem('basket') && product !== null) { 
+            let basketStr = localStorage.getItem('basket') as string
             let basketArr = JSON.parse(basketStr)
     
             for (let i = 0; i < basketArr.length; i++) {
@@ -42,7 +47,7 @@ const CatalogDetailingItem = () => {
         }
     }, [product])
 
-    if(loading) {
+    if(loading || product === null) {
         return <Loader></Loader>
     }
 

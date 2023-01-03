@@ -1,10 +1,14 @@
 import React, { memo } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
-const MyLinks = memo((props) => {
-    return (
-        <Link className={props.className} to={props.to} {...props}>{props.children}</Link>
-    )
-})
+// interface IMyLinks {
 
-export default MyLinks
+// }
+
+// const MyLinks = memo((props) => {
+//     return (
+//         <Link className={props.className} to={props.to} {...props}>{props.children}</Link>
+//     )
+// })
+
+// export default MyLinks

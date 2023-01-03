@@ -16,8 +16,6 @@ const Header = () => {
         if(auth.isAuthenticated) setVisible(false)
     }, [auth])
 
-
-
     return (
         <div className='header container'>
             <Link to="/">

@@ -1,11 +1,20 @@
-import React, { memo } from 'react'
+import React, { FC, memo } from 'react'
 import classes from './MyInput.module.scss'
 
-const MyInput = memo((props) => {
+interface MyInputProps {
+  name?:string
+  placeholder?: string
+  type: string
+  id: string
+  accept?: string 
+}
+
+
+const MyInput: FC<MyInputProps> = memo(({...props}) => {
 
 
   return (
-    <input className={classes.MyInput} placeholder={props.placeholder} type={props.type} id={props.id} {...props} required>
+    <input className={classes.MyInput} {...props} required>
       
     </input>
   )

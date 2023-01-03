@@ -4,7 +4,7 @@ const Contacts = () => {
     return (
         <div className='contacts container'>
             <div className='contacts__top'>
-                <div className='contacts__top-map' style={{width:'50%', heigth:'300px', backgroundColor:'green'}}></div>
+                <div className='contacts__top-map' style={{width:'50%', height: '300px', backgroundColor:'green'}}></div>
                 <div className='contacts__top-detail'>
                     <p className='contacts__top-detail-adress'>"ХОББИ ХОЛЛ" г. Киров, Октябрьский пр-т, 74</p>
                     <ul className='contacts__top-detail-plan'>

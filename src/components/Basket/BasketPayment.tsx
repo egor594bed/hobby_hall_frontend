@@ -1,5 +1,6 @@
-import React, { useState, useCallback} from 'react'
+import React, { useState, useCallback, memo} from 'react'
 import MySelect from '../UI/MySelect/MySelect'
+import { IPayment } from '../../types/IBaslet'
 const paymentArr = [
     {
         name: 'Наличные',
@@ -14,15 +15,15 @@ const paymentArr = [
         text: 'После обработки заказа номер карты будет отправлен на e-mail или страницу ВК, указанную при регистрации.'
     },
 ]
-const BasketPayment = () => {
-    const [activePayment, setActivePayment] = useState(undefined)
+const BasketPayment = memo(() => {
+    const [activePayment, setActivePayment] = useState<IPayment | null>(null)
 
-    const changeActivePayment = useCallback((id) => {
-        if(id === 'none') setActivePayment(undefined)
+    const changeActivePayment = useCallback((id: number | 'none') => {
+        if(id === 'none') setActivePayment(null)
         let newPayment = paymentArr.find((elem) => {
-            if(elem.id == id) return true
+            if(elem.id === id) return true
         })
-        setActivePayment(newPayment)
+        setActivePayment(newPayment!)
     }, [])
 
     return (
@@ -44,6 +45,6 @@ const BasketPayment = () => {
         </div>
 
     )
-}
+})
 
 export default BasketPayment

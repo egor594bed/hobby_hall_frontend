@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
 import { useHttp } from '../../hooks/http.hook';
+import { ICategory } from '../../types/ICatalog';
 
-const CatalogCategories = (props) => {
+interface ICatalogCategories {
+    getGoodsId: (e: React.MouseEvent<HTMLOListElement, MouseEvent>) => void
+}
+
+const CatalogCategories: FC<ICatalogCategories> = (props) => {
     const {request} = useHttp()
-    const [catalogList, setCatalogList] = useState([])
-    let [active, setActive] = useState(null);
+    const [catalogList, setCatalogList] = useState<ICategory[]>([])
+    let [active, setActive] = useState<string | boolean>(false);
 
-    function isActiveCategory (id) {
+    function isActiveCategory (e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        const target = e.target as Element
+        const id = target.id
         if(active === id) {
             setActive(false)
         }else {
@@ -37,14 +44,14 @@ const CatalogCategories = (props) => {
                         <div className={(active === elem._id) ? 'catalog__categories-subcategories active-category' : 'catalog__categories-subcategories'}
                         id={elem._id}
                         key={elem._id}
-                        onClick={(e) => isActiveCategory(e.target.id)}>
+                        onClick={(e) => isActiveCategory(e)}>
                             {elem.name}
                         </div>
                         <div className='catalog__categories-subcategories-wrapper'>
                             <ul>
                                 {elem.subCategories.map((elem) => {
                                     return (
-                                    <ol id={elem._id} key={elem._id} onClick={(e) => props.getGoodsId(e.target.id)}>
+                                    <ol id={elem._id} key={elem._id} onClick={(e) => props.getGoodsId(e)}>
                                         {elem.name}
                                     </ol>
                                     )

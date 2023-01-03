@@ -7,11 +7,14 @@ import CatalogSearch from '../components/Catalog/CatalogSearch'
 const Catalog = () => {
     const params = useParams()
     const navigate = useNavigate()
-    const [subCategoryId, setSubCategoryId] = useState('')
-    const getGoodsId = useCallback((id) => {
+    const [subCategoryId, setSubCategoryId] = useState<string>('')
+
+    const getGoodsId = useCallback((e: React.MouseEvent<HTMLOListElement, MouseEvent>) => {
+        const target = e.target as Element
+        const id = target.id
         if(params.id) navigate(-1)
         setSubCategoryId(id)
-    })
+    }, [subCategoryId, params])
 
     return (
         <div className='catalog container'>

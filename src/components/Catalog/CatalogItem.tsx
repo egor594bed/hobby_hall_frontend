@@ -1,22 +1,27 @@
-import React from 'react'
+import React, { FC } from 'react'
 import {Link} from 'react-router-dom'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { toBasket } from '../../utils/toBasket'
 import MyButton from '../UI/MyButton/MyButton'
+import { IProduct } from '../../types/ICatalog'
 
-const CatalogItem = ({data}) => {
+const CatalogItem: FC<IProduct> = (data) => {
+    console.log(data)
     const [onBasket, setOnBasket] = useState(false)
 
-    function addToBasket(e) {
+    function addToBasket(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
-        toBasket(e.target.dataset.id)
-        setOnBasket(!onBasket)
+        let target = e.target as HTMLDataElement
+        if (typeof(target.dataset.id) === 'string') {
+            toBasket(target.dataset.id)
+            setOnBasket(!onBasket)
+        }
     }
 
     useEffect(() => {
         if(localStorage.getItem('basket')) {
-            let basketStr = localStorage.getItem('basket')
+            let basketStr = localStorage.getItem('basket') as string
             let basketArr = JSON.parse(basketStr)
     
             for (let i = 0; i < basketArr.length; i++) {

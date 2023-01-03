@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { FC } from 'react'
 import classes from './MyModal.module.scss'
 
-const MyModal = (props) => {
+interface IMyModal {
+    visible: boolean
+    children: React.ReactNode
+    setVisible: (visible: boolean) => void
+}
+
+const MyModal: FC<IMyModal> = (props) => {
 
     const rootClasses = [classes.MyModal];
 

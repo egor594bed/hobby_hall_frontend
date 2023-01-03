@@ -13,14 +13,19 @@ const LoginModal = () => {
         console.log(error)
     }
 
-    const registerHandler = async (e) => {
+    const registerHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
+        const email = document.getElementById('auth-email') as HTMLInputElement
+        const password = document.getElementById('auth-password') as HTMLInputElement
+        const name = document.getElementById('auth-name') as HTMLInputElement
+        const phone = document.getElementById('auth-phone') as HTMLInputElement
+
         const form = {
-            email: document.getElementById('auth-email').value,
-            password: document.getElementById('auth-password').value,
-            name: document.getElementById('auth-name').value,
-            phone: document.getElementById('auth-phone').value
+            email: email.value,
+            password: password.value,
+            name: name.value,
+            phone: phone.value
         }
 
         try {
@@ -29,11 +34,16 @@ const LoginModal = () => {
         } catch (e) {}
     }
 
-    const loginHandler = async (e) => {
+    const loginHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
+
+        const email = document.getElementById('auth-email') as HTMLInputElement
+        const password = document.getElementById('auth-password') as HTMLInputElement
+        const value = email.value as string
+
         const form = {
-            email: document.getElementById('auth-email').value,
-            password: document.getElementById('auth-password').value,
+            email: email.value,
+            password: password.value,
         }
 
         try {

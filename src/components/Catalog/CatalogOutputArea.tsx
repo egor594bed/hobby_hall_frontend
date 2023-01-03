@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
@@ -6,23 +6,28 @@ import { useHttp } from '../../hooks/http.hook'
 import Loader from '../Loader/Loader'
 import CatalogItem from './CatalogItem'
 import CatalogPromoSlider from './CatalogPromoSlider'
+import { IProduct } from '../../types/ICatalog'
 
-const CatalogOutputArea = (props) => {
+interface ICatalogOutputArea {
+    subCategoryId: string
+}
+
+const CatalogOutputArea: FC<ICatalogOutputArea> = ({subCategoryId}) => {
     const {loading, error, request} = useHttp()
-    const [activeGoodsList, setActiveGoodsList] = useState([])
+    const [activeGoodsList, setActiveGoodsList] = useState<IProduct[] | []>([])
     const params = useParams()
 
     useEffect(() => {
-        if(!props.subCategoryId) return
+        if(!subCategoryId) return
         async function getGoods() {
-            const data = request(`/api/catalog/getGoodsFromId?id=${props.subCategoryId}`)
+            const data = request(`/api/catalog/getGoodsFromId?id=${subCategoryId}`)
             .then(data => {
                 setActiveGoodsList(data.activeCategoryGoods)
             })
             console.log(data)
         }
         getGoods()
-    }, [props.subCategoryId])
+    }, [subCategoryId])
 
     if(loading) {
         return (
@@ -43,7 +48,7 @@ const CatalogOutputArea = (props) => {
             {(activeGoodsList[0])
                 ?
                 activeGoodsList.map((elem) => {
-                    return <CatalogItem data={elem} key={elem._id}></CatalogItem>
+                    return <CatalogItem {...elem} key={elem._id}></CatalogItem>
                 })
                 :
                 <CatalogPromoSlider/>
