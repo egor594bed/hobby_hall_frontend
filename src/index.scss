@@ -608,6 +608,7 @@ ul,ol,li {
   }
 }
 
+.basket__comment,
 .basket__payment,
 .basket__delivery {
   width: 100%;
@@ -615,6 +616,7 @@ ul,ol,li {
   position: relative;
 }
 
+.basket__comment-title,
 .basket__payment-title,
 .basket__delivery-title {
   text-align: center;
@@ -625,7 +627,7 @@ ul,ol,li {
 .basket__payment-wrapper,
 .basket__delivery-wrapper {
   width: 80%;
-  min-height: 500px;
+  min-height: 450px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -642,12 +644,38 @@ ul,ol,li {
   margin-left: 50px;
 }
 
+.basket__comment-text,
 .basket__payment-text,
 .basket__delivery-text {
   margin-bottom: 10px;
   color: $second-color;
   font-weight: 700;
   font-size: 20px;
+}
+
+.basket__comment-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.basket__comment-input {
+  width: 50%;
+  height: 200px;
+  padding: 20px;
+  margin-bottom: 30px;
+  resize: none;
+  font-size: 16px;
+  color: $second-color;
+  border: 3px solid $first-color;
+  transition: border .2s;
+
+  &:focus,
+  &:active {
+    outline: none;
+    border: 3px solid $second-color;
+  }
 }
 
 .basket__order {

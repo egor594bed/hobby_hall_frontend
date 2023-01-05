@@ -51,17 +51,32 @@ const deliveryArr = [
     
 ]
 
-const BasketDelivery = memo(() => {
-    // const [deliveryArr, setDeliveryArr] = useState([])
+interface IBasketDelivery {
+    changeDelivery: (id: 'none' | number) => void
+}
+
+const BasketDelivery: FC<IBasketDelivery> = memo(({changeDelivery}) => {
     const [activeDelivery, setActiveDelivery] = useState<IDelivery | null>(null)
 
+    //Смена активного селекта
     const changeActiveDelivery = useCallback((id: number | 'none') => {
-        if(id === 'none') setActiveDelivery(null)
+        if(id === 'none' ) {
+            setActiveDelivery(null)
+            changeDelivery('none')
+            return
+        }
         let newDelivery = deliveryArr.find((elem) => {
             if(elem.id == id) return true
         })
-        setActiveDelivery(newDelivery!)
+        if(newDelivery !== undefined) {
+            setActiveDelivery(newDelivery)
+            changeDelivery(newDelivery.id)
+        }else {
+            setActiveDelivery(null)
+            changeDelivery('none')
+        }
     }, [])
+
 
     return (
         <div className='basket__delivery'>

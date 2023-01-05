@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import BasketItem from '../components/Basket/BasketItem'
@@ -14,13 +14,16 @@ import { IProduct } from '../types/ICatalog'
 
 interface IOrderProperty {
     current?: {
-        delivery: string
-        payment: string
+        delivery: 'none' | number
+        payment: 'none' | number
     }
 }
 
 const Basket = () => {
     const {request, loading, error} = useHttp()
+    const [update, setUpdate] = useState(false)
+    const [checked, setCheked] = useState<boolean>(true)
+    const [buttonActive, setButtonActive] = useState<boolean>(false)
     const [basketArr, setBasketArr] = useState<IProduct[]>([])
     const [total, setTotal] = useState(0)
     const [updateTotal, setUpdateTotal] = useState(false)
@@ -48,7 +51,6 @@ const Basket = () => {
             delivery: 'none',
             payment: 'none'
         }
-        
     }, [])
 
     useEffect(() => {
@@ -83,6 +85,7 @@ const Basket = () => {
 
     }, [basketArr])
 
+    //Удаление продукта из локалстареджа
     const deleteProductFromBasket = useCallback((id: string) => {
         toBasket(id)
         const newBasket = basketArr.filter((elem) => {
@@ -91,9 +94,75 @@ const Basket = () => {
         setBasketArr(newBasket)
     }, [basketArr])
 
-    const postNewOrder = useCallback(() => {
-        // ОТПРАВИТЬ ЗАКАЗ В БД
+    //Смена способа доставки/оплаты
+    const changeDelivery = useCallback((id: 'none' | number) => {
+        if(orderProperty.current != undefined) {
+            orderProperty.current.delivery = id
+            setUpdate(true)
+        }
     }, [])
+    const changePayment = useCallback((id: 'none' | number) => {
+        if(orderProperty.current != undefined) {
+            orderProperty.current.payment = id
+            setUpdate(true)
+        }
+    }, [])
+
+    //Проверка состояния кнопки 
+    useEffect(() => {
+        if(!update) return
+        if (orderProperty.current?.delivery !== 'none' && orderProperty.current?.payment !== 'none' && checked && basketArr[0]) {
+            setButtonActive(true)
+            setUpdate(false)
+        }else {
+            setButtonActive(false)
+            setUpdate(false)
+        }
+    }, [update, basketArr])
+
+    // ОТПРАВИТЬ ЗАКАЗ В БД
+    const postNewOrder = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
+        e.preventDefault()
+        const userData = localStorage.getItem('userData') as string
+        const userId = JSON.parse(userData).userId
+
+        const data = () => {
+            const locale = 'ru-ru';
+            const d = new Date();
+
+            const day = d.getDate();
+            const month = d.toLocaleString(locale, { month: 'long' });
+            const year = d.getFullYear();
+
+            const time = d.toLocaleString(locale, { hour12: false, hour: 'numeric', minute: 'numeric'});
+
+            return `${month} ${day}, ${year} @ ${time}`; // May 5, 2019 @ 23:41
+        }
+
+        const commentDiv = document.querySelector('.basket__comment-input') as HTMLInputElement
+        const comment = commentDiv.value
+
+        const form = {
+            userId: userId,
+            data: data(),
+            basketArr: basketArr,
+            deliveryId: orderProperty.current?.delivery,
+            paymentId: orderProperty.current?.payment,
+            comment: comment,
+            state: 'Новый'
+        }
+        
+        request('api/order/newOrder', 'POST', {...form})
+        .then(() => {
+            localStorage.removeItem('basket')
+            setBasketArr([])
+        })
+
+    }, [basketArr])
+
+    if (loading) {
+        return <Loader></Loader>
+    }
 
     return (
         <div className='basket container'>
@@ -124,14 +193,25 @@ const Basket = () => {
                     <p>Общий итог: <span>{total} р.</span></p>
                 </div>
             </div>
-            <BasketDelivery></BasketDelivery>
-            <BasketPayment></BasketPayment>
+            <BasketDelivery changeDelivery={changeDelivery}></BasketDelivery>
+            <BasketPayment changePayment={changePayment}></BasketPayment>
+            <div className='basket__comment'>
+                <h2 className='basket__comment-title'>Комментарий к заказу</h2>
+                <div className='basket__comment-wrapper'>
+                    <p className='basket__comment-text'>Вы можете оставить комментарий к заказу, если вам необходимо</p>
+                    <textarea className='basket__comment-input' placeholder='Оставте свой комментарий'/>
+                </div>
+            </div>
             <div className='basket__order'>
                 <div className='basket__order-checkbox-wrapper'>
-                    <input type='checkbox'></input>
+                    <input type='checkbox' onClick={e => {
+                        setUpdate(true)
+                        setCheked(!checked)
+                        }}
+                        defaultChecked={checked}></input>
                     <label>Согласен с бла бла бла</label>
                 </div>
-                <MyButton style={{fontSize: '20px', fontWeight: '700'}} onClick={postNewOrder}>Оформить заказ</MyButton>
+                <MyButton style={{fontSize: '20px', fontWeight: '700'}} disabled={!buttonActive} onClick={postNewOrder}>Оформить заказ</MyButton>
             </div>
         </div>
     )

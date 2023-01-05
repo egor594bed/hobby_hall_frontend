@@ -14,5 +14,10 @@
         background-color: #4b1f07;
         color: #ecdfc9;
     }
+
+    &:disabled {
+        background-color: gray;
+        color: black;
+    }
 }
 

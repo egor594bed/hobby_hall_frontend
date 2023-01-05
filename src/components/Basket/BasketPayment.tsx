@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo} from 'react'
+import React, { useState, useCallback, memo, FC} from 'react'
 import MySelect from '../UI/MySelect/MySelect'
 import { IPayment } from '../../types/IBaslet'
 const paymentArr = [
@@ -9,21 +9,37 @@ const paymentArr = [
         text: 'Оплата наличными или картой при получении товара в магазине (самовывоз).'
     },
     {
-        name: 'Отпала на карту',
+        name: 'Оплата на карту',
         id: 2,
         imgName: 'oplata_na_kartu_1.jpg',
         text: 'После обработки заказа номер карты будет отправлен на e-mail или страницу ВК, указанную при регистрации.'
     },
 ]
-const BasketPayment = memo(() => {
+
+interface IBasketPayment {
+    changePayment: (id: 'none' | number) => void
+}
+
+const BasketPayment: FC<IBasketPayment> = memo(({changePayment}) => {
     const [activePayment, setActivePayment] = useState<IPayment | null>(null)
 
+    //Смена активного селекта
     const changeActivePayment = useCallback((id: number | 'none') => {
-        if(id === 'none') setActivePayment(null)
+        if(id === 'none') {
+            setActivePayment(null)
+            changePayment('none')
+            return
+        }
         let newPayment = paymentArr.find((elem) => {
-            if(elem.id === id) return true
+            if(elem.id == id) return true
         })
-        setActivePayment(newPayment!)
+        if(newPayment !== undefined) {
+            setActivePayment(newPayment)
+            changePayment(newPayment.id)
+        }else {
+            setActivePayment(null)
+            changePayment('none')  
+        }
     }, [])
 
     return (

@@ -7,7 +7,6 @@ import MyButton from '../UI/MyButton/MyButton'
 import { IProduct } from '../../types/ICatalog'
 
 const CatalogItem: FC<IProduct> = (data) => {
-    console.log(data)
     const [onBasket, setOnBasket] = useState(false)
 
     function addToBasket(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -32,9 +31,6 @@ const CatalogItem: FC<IProduct> = (data) => {
             }
         }
     }, [])
-
-
-
 
     return (
         <Link to={`product/${data._id}`}>
