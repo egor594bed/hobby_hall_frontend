@@ -3,31 +3,22 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
+import { IProduct } from '../../types/ICatalog'
 import Loader from '../Loader/Loader'
 import CatalogItem from './CatalogItem'
 import CatalogPromoSlider from './CatalogPromoSlider'
-import { IProduct } from '../../types/ICatalog'
+
 
 interface ICatalogOutputArea {
-    subCategoryId: string
+    activeGoodsList: IProduct[]
+    loading: boolean
 }
 
-const CatalogOutputArea: FC<ICatalogOutputArea> = ({subCategoryId}) => {
-    const {loading, error, request} = useHttp()
-    const [activeGoodsList, setActiveGoodsList] = useState<IProduct[] | []>([])
+const CatalogOutputArea: FC<ICatalogOutputArea> = ({activeGoodsList, loading}) => {
+
     const params = useParams()
 
-    useEffect(() => {
-        if(!subCategoryId) return
-        async function getGoods() {
-            const data = request(`/api/catalog/getGoodsFromId?id=${subCategoryId}`)
-            .then(data => {
-                setActiveGoodsList(data.activeCategoryGoods)
-            })
-            console.log(data)
-        }
-        getGoods()
-    }, [subCategoryId])
+
 
     if(loading) {
         return (

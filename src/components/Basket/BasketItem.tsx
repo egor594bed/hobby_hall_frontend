@@ -10,8 +10,6 @@ interface IBasketItem {
     changeTotal(id: string, counter: number): void
 }
 
-
-
 const BasketItem: FC<IBasketItem> = memo(({data, deleteProduct, changeTotal}) => {
     const [counter, setCounter] = useState(data.total || 1)
 

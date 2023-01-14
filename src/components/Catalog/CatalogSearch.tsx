@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { memo } from 'react';
 
-const CatalogSearch = memo(() => {
+interface catalogSearchProps {
+    getSearchedProducts: (e: string) => void
+}
 
-    const [value, setValue] = useState('');
+const CatalogSearch: FC<catalogSearchProps> = memo(({getSearchedProducts}) => {
 
     return (
         <div className='catalog__search'>
             <input
             className='catalog__search-input'
             type="text"
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => getSearchedProducts(e.target.value)}
             placeholder="Поиск"
             />
         </div>

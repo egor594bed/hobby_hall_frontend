@@ -699,6 +699,71 @@ ul,ol,li {
   }
 }
 
+//Контакты
+
+.contacts {
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contacts__top {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contacts__top-map {
+  margin-right: 40px;
+}
+
+.contacts__top-detail {
+  color: $second-color;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.contacts__top-detail-adress {
+  margin-bottom: 10px;
+}
+
+.contacts__top-detail-plan {
+  margin-bottom: 10px;
+}
+
+.contacts__top-detail-tel {
+  margin-bottom: 10px;
+}
+
+.contacts__top-detail-text {
+
+}
+
+.contacts__text {
+  margin-bottom: 40px;
+  font-size: 20px;
+  font-weight: 700;
+  color: $second-color;
+  text-align: center;
+}
+
+.contacts__social {
+  display: flex;
+  flex-direction: column;
+
+  & a {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: $second-color;
+  }
+  
+}
+
+
 // Footer
 
 .footer {
@@ -834,5 +899,61 @@ ul,ol,li {
   overflow: scroll;
 }
 
+//admin-order
 
+.admin-order {
+  width: 100%;
+}
+
+.admin-order__order-item {
+  width: 100%;
+  padding: 20px;
+}
+
+.admin-order__order-personal-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-order__order-product-list {
+
+}
+
+.admin-order__order-product-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-order__order-comments {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-order__order-comment {
+  width: 50%;
+  height: 200px;
+}
+
+.admin-order__order-comment-textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+
+.admin-order__order-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-order__order-control-select {
+
+}
+
+.admin-order__order-id {
+
+}
 

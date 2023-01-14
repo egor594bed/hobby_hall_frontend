@@ -11,6 +11,7 @@ import News from "./pages/News";
 import Rules from "./pages/Rules";
 import Basket from "./pages/Basket";
 import CatalogDetailingItem from "./components/Catalog/CatalogDetailingItem"
+import AdminOrderList from "./components/Admin/AdminOrderList";
 
 function App() {
   const {token, login, logout, userId} = useAuth()
@@ -32,6 +33,7 @@ function App() {
         </Route>
         <Route path="admin" element={<AdminPanel/>}>
           <Route path="add_product" element={<AdminAdd/>}></Route>
+          <Route path="order_list" element={<AdminOrderList/>}></Route>
         </Route>
       </Routes>
     </AuthContext.Provider>
