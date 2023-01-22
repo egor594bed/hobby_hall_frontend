@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -7,10 +7,12 @@ import { toBasket } from '../../utils/toBasket'
 import Loader from '../Loader/Loader'
 import MyButton from '../UI/MyButton/MyButton'
 import { IProduct } from '../../types/ICatalog'
+import { ToastContext } from '../../context/Toast.context'
 
 
 const CatalogDetailingItem = () => {
     const params = useParams()
+    const {setToast} = useContext(ToastContext)
     const [product, setProduct] = useState<IProduct | null>(null)
     const [onBasket, setOnBasket] = useState(false)
     const {request, loading} = useHttp()
@@ -29,6 +31,11 @@ const CatalogDetailingItem = () => {
         if (typeof(target.dataset.id) === 'string') {
             toBasket(target.dataset.id)
             setOnBasket(!onBasket)
+            if(!onBasket) {
+                setToast({id: Date.now(), message: `Товар "${product!.name}" добвален в корзину`, type: 'info'})
+            }else {
+                setToast({id: Date.now(), message: `Товар "${product!.name}" удален из корзины`, type: 'info'})
+            }
         }
     }
 

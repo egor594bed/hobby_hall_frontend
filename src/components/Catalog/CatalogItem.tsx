@@ -5,9 +5,11 @@ import { useState } from 'react'
 import { toBasket } from '../../utils/toBasket'
 import MyButton from '../UI/MyButton/MyButton'
 import { IProduct } from '../../types/ICatalog'
+import { useToast } from '../../hooks/toast.hook'
 
 const CatalogItem: FC<IProduct> = (data) => {
     const [onBasket, setOnBasket] = useState(false)
+    const {setToast} = useToast()
 
     function addToBasket(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
@@ -15,6 +17,12 @@ const CatalogItem: FC<IProduct> = (data) => {
         if (typeof(target.dataset.id) === 'string') {
             toBasket(target.dataset.id)
             setOnBasket(!onBasket)
+            // Не работает, почему?
+            if(!onBasket) {
+                setToast({id: Date.now(), message: `Товар "${data.name}" добвален в корзину`, type: 'info'})
+            }else {
+                setToast({id: Date.now(), message: `Товар "${data.name}" удален из корзины`, type: 'info'})
+            }
         }
     }
 

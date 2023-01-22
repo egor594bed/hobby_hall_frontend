@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, memo } from 'react'
 import { Link } from 'react-router-dom'
 import LoginModal from './LoginModal'
 import MyModal from './UI/MyModal/MyModal'
@@ -7,7 +7,7 @@ import basket from '../img/basket.png'
 import login from '../img/login.png'
 import { AuthContext } from '../context/Auth.context'
 
-const Header = () => {
+const Header = memo(() => {
     const auth = useContext(AuthContext)
 
     const [visible, setVisible] = useState(false)
@@ -59,6 +59,6 @@ const Header = () => {
 
         </div>
     )
-}
+})
 
 export default Header

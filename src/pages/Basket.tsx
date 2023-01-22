@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import BasketItem from '../components/Basket/BasketItem'
@@ -11,6 +11,10 @@ import BasketDelivery from '../components/Basket/BasketDelivery'
 import BasketPayment from '../components/Basket/BasketPayment'
 import MyButton from '../components/UI/MyButton/MyButton'
 import { IProduct } from '../types/ICatalog'
+import { Link } from 'react-router-dom'
+import { AuthContext } from '../context/Auth.context'
+import LoginForm from '../components/LoginForm'
+import RegisterForm from '../components/RegisterForm'
 
 interface IOrderProperty {
     current?: {
@@ -20,13 +24,14 @@ interface IOrderProperty {
 }
 
 const Basket = () => {
+    const {isAuthenticated} = useContext(AuthContext)
     const {request, loading, error} = useHttp()
     const [update, setUpdate] = useState(false)
     const [checked, setCheked] = useState<boolean>(true)
+    const [updateTotal, setUpdateTotal] = useState(false)
     const [buttonActive, setButtonActive] = useState<boolean>(false)
     const [basketArr, setBasketArr] = useState<IProduct[]>([])
     const [total, setTotal] = useState(0)
-    const [updateTotal, setUpdateTotal] = useState(false)
     const orderProperty: IOrderProperty = useRef()
 
     useEffect(() => {
@@ -60,6 +65,11 @@ const Basket = () => {
         }
         setUpdateTotal(false)
     }, [updateTotal, basketArr])
+
+    const deleteBasketItems = useCallback(() => {
+        localStorage.removeItem('basket')
+        setBasketArr([])
+    }, [])
 
     const changeTotal = useCallback((id: string, counter: number) => {
         const storageBasketStr = localStorage.getItem('basket') as string
@@ -183,36 +193,63 @@ const Basket = () => {
                     :
                     (basketArr.length > 0)
                         ?
-                        basketArr.map((elem) => {
-                        return <BasketItem data={elem} deleteProduct={deleteProductFromBasket} key={elem._id} changeTotal={changeTotal}></BasketItem>
-                        })
+                        <>
+                        {basketArr.map((elem) => {
+                            return <BasketItem data={elem} deleteProduct={deleteProductFromBasket} key={elem._id} changeTotal={changeTotal}></BasketItem>
+                            })
+                        }
+                        <div className='basket__item-price-bottom-wrapper'>
+                            <MyButton onClick={deleteBasketItems}>Очистить корзину</MyButton>
+                            <div className='basket__item-price-total'>
+                                <p>Общий итог: <span>{total} р.</span></p>
+                            </div>
+                        </div>
+
+                        </>
                         :
-                        <p>В корзине пусто</p>
+                        <div className='basket__empty'>
+                            <p>В корзине пусто, перейти в <Link to='../'>каталог?</Link></p>
+                            <img src={require('../img/empty_basket.png')}></img>
+                        </div>  
                 }
-                <div className='basket__item-price-total'>
-                    <p>Общий итог: <span>{total} р.</span></p>
-                </div>
             </div>
-            <BasketDelivery changeDelivery={changeDelivery}></BasketDelivery>
-            <BasketPayment changePayment={changePayment}></BasketPayment>
-            <div className='basket__comment'>
-                <h2 className='basket__comment-title'>Комментарий к заказу</h2>
-                <div className='basket__comment-wrapper'>
-                    <p className='basket__comment-text'>Вы можете оставить комментарий к заказу, если вам необходимо</p>
-                    <textarea className='basket__comment-input' placeholder='Оставте свой комментарий'/>
+            {isAuthenticated
+                ?
+                <>
+                <BasketDelivery changeDelivery={changeDelivery}></BasketDelivery>
+                <BasketPayment changePayment={changePayment}></BasketPayment>
+                <div className='basket__comment'>
+                    <h2 className='basket__comment-title'>Комментарий к заказу</h2>
+                    <div className='basket__comment-wrapper'>
+                        <p className='basket__comment-text'>Вы можете оставить комментарий к заказу, если вам необходимо</p>
+                        <textarea className='basket__comment-input' placeholder='Оставте свой комментарий'/>
+                    </div>
                 </div>
-            </div>
-            <div className='basket__order'>
-                <div className='basket__order-checkbox-wrapper'>
-                    <input type='checkbox' onClick={e => {
-                        setUpdate(true)
-                        setCheked(!checked)
-                        }}
-                        defaultChecked={checked}></input>
-                    <label>Согласен с бла бла бла</label>
+                <div className='basket__order'>
+                    <div className='basket__order-checkbox-wrapper'>
+                        <input type='checkbox' onClick={e => {
+                            setUpdate(true)
+                            setCheked(!checked)
+                            }}
+                            defaultChecked={checked}></input>
+                        <label>Согласен с бла бла бла</label>
+                    </div>
+                    <MyButton style={{fontSize: '20px', fontWeight: '700'}} disabled={!buttonActive} onClick={postNewOrder}>Оформить заказ</MyButton>
                 </div>
-                <MyButton style={{fontSize: '20px', fontWeight: '700'}} disabled={!buttonActive} onClick={postNewOrder}>Оформить заказ</MyButton>
-            </div>
+                </>
+                :
+                <div className='basket__auth'>
+                    <p>Для оформления заказа необходимо войти в систему!</p>
+                    <div className='basket__auth-wrapper'>
+                        <div className='basket__auth-borders'>
+                            <LoginForm></LoginForm>
+                        </div>
+                        <div className='basket__auth-borders'>
+                            <RegisterForm></RegisterForm>
+                        </div>
+                    </div>
+                </div>         
+            }
         </div>
     )
 }

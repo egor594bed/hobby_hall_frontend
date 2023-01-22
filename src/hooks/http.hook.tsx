@@ -17,6 +17,7 @@ export const useHttp = () => {
             if (!response.ok) {
                 throw new Error(data.message || 'Что-то пошло не так')
             }
+            
             setLoading(false)
             return data
         } catch (e: any) {
@@ -26,7 +27,7 @@ export const useHttp = () => {
         }
     }, [])
 
-    const clearError = useCallback(() => setError(null), [error])
+    const clearError = useCallback(() => setError(null), [error, request])
 
 
     return { loading, request, error, clearError}

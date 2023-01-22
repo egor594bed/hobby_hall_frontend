@@ -305,15 +305,18 @@ ul,ol,li {
 
 .catalog__outputArea {
   width: 100%;
-  min-height: 600px;
   height: auto;
+  min-height: 600px;
   padding: 30px 30px 50px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.catalog__outputArea-items {
   display: grid;
   grid-template-columns: repeat(4, 265px);
   row-gap: 50px;
   column-gap: 12px;
-  background-color: white;
-  border-radius: 10px;
 }
 
 .catalog__item {
@@ -406,6 +409,31 @@ ul,ol,li {
   justify-content: space-between;
 }
 
+.catalog__outputArea-pagination {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalog__outputArea-pagination-btn {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $first-color;
+  border: 1px solid $second-color;
+  border-radius: 5px;
+  color: $second-color;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
 .catalog__slider-next-btn {
 
 }
@@ -429,6 +457,7 @@ ul,ol,li {
 
 .catalog__detail-top {
   height: 100%;
+  margin: 30px 0 30px;
   display: flex;
 
   justify-content: space-between;
@@ -437,6 +466,7 @@ ul,ol,li {
 .catalog__detail-top-img {
   width: 50%;
   height: 100%;
+  border-radius: 10px;
 }
 
 .catalog__detail-top-side {
@@ -492,6 +522,53 @@ ul,ol,li {
   border: none;
   border-radius: 10px;
   background-color: white;
+}
+
+.basket__empty {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & p {
+    font-size: 24px;
+    color: $second-color;
+    margin-bottom: 20px;
+  }
+
+}
+
+.basket__auth {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & p {
+    margin-bottom: 40px;
+    font-size: 18px;
+    font-weight: 700;
+    color: $second-color
+  }
+}
+
+.basket__auth-wrapper {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.basket__auth-borders {
+  width: 30%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $second-color;
+  border-radius: 20px;
 }
 
 .basket__title {
@@ -588,9 +665,15 @@ ul,ol,li {
   justify-self: start;
 }
 
+.basket__item-price-bottom-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .basket__item-price-total {
+  width: 280px;
   height: 70px;
-  margin-left: 80%;
   margin-top: 5px;
   border-top: 2px solid $second-color;
   border-bottom: 2px solid $second-color;
@@ -776,6 +859,7 @@ ul,ol,li {
 // modal
 
 .modal-login__form {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

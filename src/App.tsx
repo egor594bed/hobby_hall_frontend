@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes, useRoutes, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminAdd from "./components/Admin/AdminAdd";
 import { AuthContext } from "./context/Auth.context";
+import { ToastContext } from "./context/Toast.context";
 import { useAuth } from "./hooks/auth.hook";
+import { useToast } from "./hooks/toast.hook";
 import AdminPanel from "./pages/AdminPanel";
 import Catalog from "./pages/Catalog";
 import Contacts from "./pages/Contacts";
@@ -15,9 +17,11 @@ import AdminOrderList from "./components/Admin/AdminOrderList";
 
 function App() {
   const {token, login, logout, userId} = useAuth()
+  const {toastList, setToast} = useToast()
   const isAuthenticated = !!token
   // const routes = useRoutes(isAuthenticated)
   return (
+    <ToastContext.Provider value={{toastList, setToast}}>
     <AuthContext.Provider value={{token, login, logout, userId, isAuthenticated}}>
       <Routes>
         <Route path="/" element={<Layout/>}>
@@ -37,6 +41,7 @@ function App() {
         </Route>
       </Routes>
     </AuthContext.Provider>
+    </ToastContext.Provider>
   )
 }
 

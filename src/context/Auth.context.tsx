@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-interface LoginParams {
+interface IAuthContext {
     token: string
     userId: string
     login: (jwtToken: string, id: string) => void
@@ -10,7 +10,7 @@ interface LoginParams {
 
 function noop() {}
 
-export const AuthContext = createContext<LoginParams>({
+export const AuthContext = createContext<IAuthContext>({
     token: '',
     userId: '',
     login: noop,

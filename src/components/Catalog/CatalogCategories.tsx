@@ -40,10 +40,9 @@ const CatalogCategories: FC<ICatalogCategories> = (props) => {
             <div className='catalog__categories-wrapper'>
             {catalogList.map((elem) => {
                 return (
-                    <>
+                    <div key={elem._id}>
                         <div className={(active === elem._id) ? 'catalog__categories-subcategories active-category' : 'catalog__categories-subcategories'}
                         id={elem._id}
-                        key={elem._id}
                         onClick={(e) => isActiveCategory(e)}>
                             {elem.name}
                         </div>
@@ -58,7 +57,7 @@ const CatalogCategories: FC<ICatalogCategories> = (props) => {
                                 })}
                             </ul>
                         </div>
-                    </>
+                    </div>
                 )
             })}
             </div>
