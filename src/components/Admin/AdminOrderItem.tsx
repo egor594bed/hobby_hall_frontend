@@ -1,10 +1,7 @@
 import React, { FC, useState } from 'react'
+import { useHttp } from '../../hooks/http.hook'
 import { IProduct } from '../../types/ICatalog'
 import MyButton from '../UI/MyButton/MyButton'
-
-interface IAdminOrderItemProps {
-    data: IAdminOrderItem
-}
 
 interface IAdminOrderItem {
     _id: string
@@ -25,50 +22,71 @@ interface IUser {
     phone: string
 }
 
-const AdminOrderItem: FC<IAdminOrderItemProps> = ({data}) => {
-    const [state, setState] = useState('white')
+const AdminOrderItem: FC<IAdminOrderItem> = ({...data}) => {
+    const [state, setState] = useState(data.state)
+    const [comment, setComment] = useState(data.comment)
+    const [isHidden, setIsHidden] = useState(true)
+    const {request} = useHttp()
+
+    async function changeOrder() {
+        try {
+            await request('../api/order/changeOrder', 'POST', {
+                orderId: data._id,
+                state: state,
+                orderComment: comment
+            })
+        } catch (error) {
+            
+        }
+    }
     return (
-        <div className='admin-order__order-item' style={{backgroundColor: state}}>
-            <div className='admin-order__order-personal-data'>
+        <div className='admin-order__order-item'>
+            <div className='admin-order__order-personal-data' onClick={() => setIsHidden(!isHidden)}>
                 <p>Имя: {data.user.name}</p>
                 <p>Телефон: {data.user.phone}</p>
                 <p>Почта: {data.user.email}</p>
             </div>
-            <div className='admin-order__order-product-list'>
-                <p>Список товаров:</p>
-                {
-                    data.productsArr.map((elem) => {
-                        return (
-                            <div className='admin-order__order-product-item'>
-                                <p>{elem.name}</p>
-                                <p>{elem.article}</p>
-                                <p>{elem.total} шт.</p>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-            <div className='admin-order__order-comments'>
-                <div className='admin-order__order-comment'>
-                    <p>Комментарий заказчика:</p>
-                    <p>{data.clientComment || "Нет комментария"}</p>
+            
+            <div className={isHidden ? 'admin-order__order-hidden' : 'admin-order__order-visible'}>
+                <div className='admin-order__order-product-list'>
+                    <p>Список товаров:</p>
+                    {
+                        data.productsArr.map((elem) => {
+                            return (
+                                <div className='admin-order__order-product-item' key={elem._id}>
+                                    <p>{elem.name}</p>
+                                    <p>{elem.article}</p>
+                                    <p>{elem.total} шт.</p>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
-                <div className='admin-order__order-comment'>
-                    <p>Комментарий к заказу:</p>
-                    <textarea className='admin-order__order-comment-textarea'>{data.comment || ""}</textarea>
+                <div className='admin-order__order-comments'>
+                    <div className='admin-order__order-comment'>
+                        <p>Комментарий заказчика:</p>
+                        <p>{data.clientComment || "Нет комментария"}</p>
+                    </div>
+                    <div className='admin-order__order-comment'>
+                        <p>Комментарий к заказу:</p>
+                        <textarea className='admin-order__order-comment-textarea' defaultValue={comment} onChange={e => setComment(e.target.value)}></textarea>
+                    </div>
                 </div>
             </div>
             <div className='admin-order__order-control'>
-                <select className='admin-order__order-control-select' onChange={e => setState(e.target.value)}>
-                    <option value='red'>Новый</option>
-                    <option value='orange'>Ожидание</option>
-                    <option value='blue'>Оплачен</option>
-                    <option value='green'>Отправлен</option>
-                    <option value='black'>Отмена</option>
+                <select className='admin-order__order-control-select' defaultValue={data.state} onChange={e => setState(e.target.value)}>
+                    <option value='Новый'>Новый</option>
+                    <option value='Ожидание'>Ожидание</option>
+                    <option value='Оплачен'>Оплачен</option>
+                    <option value='Отправлен'>Отправлен</option>
+                    <option value='Отмена'>Отмена</option>
                 </select>
-                <MyButton onClick={()=>{}}>Сохранить изменения</MyButton>
+                <MyButton onClick={()=>changeOrder()}>Сохранить изменения</MyButton>
             </div>
-            <p className='admin-order__order-id'>Id заказа: {data._id}</p>
+            <div className='admin-order__order-bottom-wrapper'>
+                <p className='admin-order__order-id'>Id заказа: {data._id}</p>
+                <p className='admin-order__order-data'>Дата: {data.data}</p>
+            </div>
         </div>
     )
 }

@@ -38,16 +38,21 @@ const CatalogItem: FC<IProduct> = (data) => {
                 }
             }
         }
-    }, [])
+    }, [data._id])
 
     return (
         <Link to={`product/${data._id}`}>
             <div className='catalog__item' id={data._id}>
                 <div className='catalog__item-wrapper'>
-                    <img className='catalog__item-img' src={(data.imgName) ?require(`../../img/${data.imgName}`) : require('../../img/nophoto.jpeg')}></img>
+                    <img className='catalog__item-img' src={
+                    (data.imgName)
+                        ? require(`../../img/goodsImgs/${data.imgName}`)
+                        : require(`../../img/goodsImgs/nophoto.jpeg`)
+                        }
+                    alt='photo'></img>
                     <div className='catalog__item-text'>
                         <h2 className='catalog__item-title'>{data.name}</h2>
-                        <p className="catalog__item-description">{`${data.description}`}</p>
+                        <p className="catalog__item-description">{data.description || 'Нет описания'}</p>
                     </div>
                     <div className='catalog__item-wrapper-bottom'>
                         <h4 className="catalog__item-price">{`${data.price} р.`}</h4>

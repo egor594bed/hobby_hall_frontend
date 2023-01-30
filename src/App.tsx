@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Route, Routes, useRoutes, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminAdd from "./components/Admin/AdminAdd";
@@ -19,7 +19,7 @@ function App() {
   const {token, login, logout, userId} = useAuth()
   const {toastList, setToast} = useToast()
   const isAuthenticated = !!token
-  // const routes = useRoutes(isAuthenticated)
+
   return (
     <ToastContext.Provider value={{toastList, setToast}}>
     <AuthContext.Provider value={{token, login, logout, userId, isAuthenticated}}>

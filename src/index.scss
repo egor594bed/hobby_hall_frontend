@@ -37,6 +37,13 @@ ul,ol,li {
   margin: 0 auto !important;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 // Header
 
 .header {
@@ -92,6 +99,7 @@ ul,ol,li {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .header__middle-login-img,
@@ -330,9 +338,10 @@ ul,ol,li {
     & .catalog__item-text {
       height: auto;
       min-height: 100px;
+      max-height: 300px;
       
       & .catalog__item-description::after {
-        height: 0;
+        height: 10px;
       }
     }
 
@@ -429,9 +438,16 @@ ul,ol,li {
   border-radius: 5px;
   color: $second-color;
 
+  transition: all .3s;
+
   &:last-of-type {
     margin-right: 0;
   }
+}
+
+.catalog__outputArea-pagination-btn-active {
+  color: $first-color;
+  background-color: $second-color;
 }
 
 .catalog__slider-next-btn {
@@ -939,13 +955,22 @@ ul,ol,li {
   }
 }
 
-// PushMessage 
+// Toast
 
-.push-message {
-  position: absolute;
-  top: 100px;
-  right: 100px;
-  background-color: white;
+.toast-item-animate-enter {
+  transform: translateX(350px);
+  
+}
+.toast-item-animate-enter-active {
+  transform: translateX(0);
+  transition: all .3s linear;
+}
+.toast-item-animate-exit {
+  opacity: 1;
+}
+.toast-item-animate-exit-active {
+  transform: translateX(350px);
+  transition: all .5s linear;
 }
 
 // AdminPanel
@@ -987,21 +1012,37 @@ ul,ol,li {
 
 .admin-order {
   width: 100%;
+  overflow: scroll;
 }
 
 .admin-order__order-item {
   width: 100%;
   padding: 20px;
+  margin-bottom: 10px;
+  background-color: dimgrey;
+  color: white;
 }
 
 .admin-order__order-personal-data {
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointerpointer;
+}
+
+.admin-order__order-hidden {
+  height: 0;
+  overflow: hidden;
+}
+
+.admin-order__order-visible {
+  height: auto;
+  overflow: none;
 }
 
 .admin-order__order-product-list {
-
+  margin-bottom: 10px;
 }
 
 .admin-order__order-product-item {
@@ -1028,6 +1069,7 @@ ul,ol,li {
 }
 
 .admin-order__order-control {
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1039,5 +1081,11 @@ ul,ol,li {
 
 .admin-order__order-id {
 
+}
+
+.admin-order__order-bottom-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 

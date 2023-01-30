@@ -30,15 +30,15 @@ const Header = memo(() => {
                 <div className='header__middle'>
                     {auth.isAuthenticated
                         ?
-                        <Link className='header__middle-login' to="/" onClick={() => auth.logout()}>
+                        <div className='header__middle-login' onClick={() => auth.logout()}>
                             <img className='header__middle-login-img' src={login} alt="login"></img>
                             <p className='header__middle-login-text'>Выйти</p>
-                        </Link>
+                        </div>
                         :
-                        <Link className='header__middle-login' to="/" onClick={() => setVisible(!visible)}>
+                        <div className='header__middle-login' onClick={() => setVisible(!visible)}>
                             <img className='header__middle-login-img' src={login} alt="login"></img>
                             <p className='header__middle-login-text'>Войти</p>
-                        </Link>
+                        </div>
                     }
                     <Link to="/basket">
                         <div className='header__middle-basket-wrapper'>

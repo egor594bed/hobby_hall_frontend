@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IToast } from "../types/IToast";
 
 export const useToast = (() => {
@@ -14,7 +14,6 @@ export const useToast = (() => {
             setToastList([...toastList, toast])
             setToast(null)
         }
-        console.log(toast)
     }, [toast])
 
     useEffect(() => {
@@ -23,7 +22,7 @@ export const useToast = (() => {
             deleteTimout.current = setTimeout(() => {
                 toastList.splice(0, 1)
                 setToastList([...toastList])
-            }, 2000)
+            }, 3000)
         }
 
     }, [toastList])

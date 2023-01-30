@@ -1,10 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../Loader/Loader'
 import AdminOrderItem from './AdminOrderItem'
+import { IProduct } from '../../types/ICatalog'
+
+interface IAdminOrderItem {
+    _id: string
+    user: IUser
+    data: string
+    productsArr: IProduct[]
+    clientComment?: string
+    comment: string
+    deliveryId: string
+    paymentId: string
+    state: string
+}
+
+interface IUser {
+    _id: string
+    email: string
+    name: string
+    phone: string
+}
 
 const AdminOrderList = () => {
-    const [orderList, setOrderList] = useState(undefined)
-
+    const [orderList, setOrderList] = useState([])
+    const sortedList = [...orderList].reverse()
     useEffect(() => {
         try {
             fetch('../api/order/getOrderList')
@@ -19,9 +39,11 @@ const AdminOrderList = () => {
 
     return (
         <div className='admin-order'>
-            {orderList
+            {orderList[0]
                 ?
-                <AdminOrderItem data={orderList[0]}></AdminOrderItem>
+                sortedList.map((data: IAdminOrderItem) => {
+                    return <AdminOrderItem key={data._id} {...data}></AdminOrderItem>
+                })
                 :
                 <Loader></Loader>
 

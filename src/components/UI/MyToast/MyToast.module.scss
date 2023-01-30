@@ -6,7 +6,7 @@
     padding: 30px;
     position: fixed;
     right: 0;
-    z-index: 10;
+    z-index: 12;
     pointer-events: none;
 }
 
@@ -23,7 +23,6 @@
     font-weight: 700;
     background-color: $first-color;
 
-    animation: rightToLeft .5s;
 }
 
 .success {
@@ -48,14 +47,14 @@
     margin-right: 20px;
 }
 
-@keyframes rightToLeft {
-	from {
-        transform: translateX(100%);
+// @keyframes rightToLeft {
+// 	from {
+//         transform: translateX(100%);
         
-      }
-      to {
-        transform: translateX(0);
-      }
-}
+//       }
+//       to {
+//         transform: translateX(0);
+//       }
+// }
 
 

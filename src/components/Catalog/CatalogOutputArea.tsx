@@ -43,7 +43,13 @@ const CatalogOutputArea: FC<ICatalogOutputArea> = ({activeGoodsList, loading}) =
         const pagesElements = []
         console.log(activeGoodsList.length/itemsOnPage)
         for (let i = 0; i < pages; i++) {
-            pagesElements.push(<div className='catalog__outputArea-pagination-btn' key={i} id={(i + 1).toString()} onClick={e => changePage(e)}>{i + 1}</div>)
+            pagesElements.push(
+                <div
+                className={(page == i + 1) ? 'catalog__outputArea-pagination-btn catalog__outputArea-pagination-btn-active' : 'catalog__outputArea-pagination-btn'}
+                key={i}
+                id={(i + 1).toString()}
+                onClick={e => changePage(e)}
+                >{i + 1}</div>)
         }
         return pagesElements
     }

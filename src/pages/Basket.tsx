@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/Auth.context'
 import LoginForm from '../components/LoginForm'
 import RegisterForm from '../components/RegisterForm'
+import { ToastContext } from '../context/Toast.context'
 
 interface IOrderProperty {
     current?: {
@@ -25,6 +26,7 @@ interface IOrderProperty {
 
 const Basket = () => {
     const {isAuthenticated} = useContext(AuthContext)
+    const {setToast} = useContext(ToastContext)
     const {request, loading, error} = useHttp()
     const [update, setUpdate] = useState(false)
     const [checked, setCheked] = useState<boolean>(true)
@@ -69,6 +71,7 @@ const Basket = () => {
     const deleteBasketItems = useCallback(() => {
         localStorage.removeItem('basket')
         setBasketArr([])
+        setUpdate(true)
     }, [])
 
     const changeTotal = useCallback((id: string, counter: number) => {
@@ -166,13 +169,11 @@ const Basket = () => {
         .then(() => {
             localStorage.removeItem('basket')
             setBasketArr([])
+            setToast({message: 'Заказ успешно оформлен! Мы с вами свяжемся в ближайшее время! Спасибо за покупки!', type: 'success', id: Date.now()})
+
         })
 
     }, [basketArr])
-
-    if (loading) {
-        return <Loader></Loader>
-    }
 
     return (
         <div className='basket container'>

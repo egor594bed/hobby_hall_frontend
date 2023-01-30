@@ -9,13 +9,12 @@ import MyButton from '../UI/MyButton/MyButton'
 import { IProduct } from '../../types/ICatalog'
 import { ToastContext } from '../../context/Toast.context'
 
-
 const CatalogDetailingItem = () => {
     const params = useParams()
     const {setToast} = useContext(ToastContext)
     const [product, setProduct] = useState<IProduct | null>(null)
     const [onBasket, setOnBasket] = useState(false)
-    const {request, loading} = useHttp()
+    const {request} = useHttp()
     function noop() {}
 
     useEffect(() => {
@@ -24,7 +23,7 @@ const CatalogDetailingItem = () => {
             .then((data) => setProduct(data.product))
         }
         getProduct()
-    }, [])
+    }, [params.id, request])
 
     function addToBasket(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         let target = e.target as HTMLDataElement
@@ -54,7 +53,7 @@ const CatalogDetailingItem = () => {
         }
     }, [product])
 
-    if(loading || product === null) {
+    if(product === null) {
         return <Loader></Loader>
     }
 
@@ -62,7 +61,12 @@ const CatalogDetailingItem = () => {
         <div className='catalog__detail'>
             <Link to='../'>Назад</Link>
             <div className='catalog__detail-top'>
-                <img className='catalog__detail-top-img' src={require(`../../img/${(product.imgName) ? product.imgName : 'nophoto.jpeg'}`)} alt='photo'></img>
+                <img className='catalog__detail-top-img' src={
+                (product.imgName)
+                    ? require(`../../img/goodsImgs/${product.imgName}`)
+                    : require(`../../img/goodsImgs/nophoto.jpeg`)
+                    }
+                alt='photo'></img>
                 <div className='catalog__detail-top-side'>
                     <p className='catalog__detail-top-side-title'>{product.name}</p>
                     <p className='catalog__detail-top-side-article'>{product.article}</p>
